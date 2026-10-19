@@ -36,11 +36,11 @@ func TestAnalyzeParseError(t *testing.T) {
 	}
 }
 
-// Integration test against a real Postgres: DRISHTI_TEST_DSN=postgres://...
+// Integration test against a real Postgres: DBDRISHTI_TEST_DSN=postgres://...
 func TestLive(t *testing.T) {
-	dsn := os.Getenv("DRISHTI_TEST_DSN")
+	dsn := os.Getenv("DBDRISHTI_TEST_DSN")
 	if dsn == "" {
-		t.Skip("DRISHTI_TEST_DSN not set")
+		t.Skip("DBDRISHTI_TEST_DSN not set")
 	}
 	s := &Service{}
 	if _, err := s.Connect(dsn); err != nil {

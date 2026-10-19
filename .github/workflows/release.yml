@@ -1,0 +1,86 @@
+# Builds every app in this repo and attaches them all to one GitHub Release,
+# tagged with the short commit SHA and marked latest, so these links always
+# serve the newest build (the links on dash):
+#   https://github.com/mepkn/dbdrishti/releases/latest/download/dbdrishti-macos.zip
+# Started by hand: Actions tab → Release → Run workflow, or
+# `gh workflow run release.yml`.
+#
+# macOS: unsigned universal build (Apple silicon and Intel). On first launch,
+# right-click the app → Open (or `xattr -dr com.apple.quarantine dbdrishti.app`).
+name: Release
+
+on:
+  workflow_dispatch:
+
+permissions:
+  # write: to create the release.
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  macos:
+    # Apple silicon runner; the universal build adds an Intel binary.
+    runs-on: macos-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version-file: go.mod
+          cache-dependency-path: go.sum
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install Wails CLI
+        # Same version as go.mod.
+        run: go install github.com/wailsapp/wails/v3/cmd/wails3@v3.0.0-beta.30
+
+      - name: Install frontend dependencies
+        run: npm --prefix frontend ci
+
+      - name: Build app
+        run: |
+          wails3 task darwin:package:universal
+          mkdir -p dist
+          ditto -c -k --keepParent "bin/dbdrishti.app" "dist/dbdrishti-macos.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: dist/dbdrishti-macos.zip
+          retention-days: 90
+          if-no-files-found: error
+
+  publish:
+    # One release with every app, so each releases/latest/download link works.
+    # The files keep fixed names so those links never change.
+    needs: [macos]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          merge-multiple: true
+
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          # One release per commit: running it again on the same commit fails
+          # here instead of replacing that release.
+          short="${GITHUB_SHA::7}"
+          gh release create "$short" dist/* \
+            -R "${{ github.repository }}" --target "$GITHUB_SHA" --latest \
+            --title "$short" \
+            --notes "Built from $short by run ${{ github.run_id }}. Unsigned macOS app (Apple silicon and Intel); first launch: right-click it → Open."

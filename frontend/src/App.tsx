@@ -235,7 +235,7 @@ export default function App() {
     <div className="flex h-full flex-col">
       <header className="drag flex h-[50px] shrink-0 items-center gap-2 border-b border-border bg-panel pr-3 pl-[92px]">
         <img src="/favicon.svg" className="h-5 w-5" alt="" />
-        <span className="font-semibold">Drishti</span>
+        <span className="font-semibold">DBDrishti</span>
         <div className="no-drag ml-4 flex flex-1 items-center gap-2">
           <input
             value={dsn}

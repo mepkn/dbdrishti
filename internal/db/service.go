@@ -20,6 +20,7 @@ const maxRows = 500
 type Service struct {
 	mu     sync.Mutex
 	conn   *pgx.Conn
+	dsn    string
 	schema string
 }
 
@@ -87,6 +88,7 @@ func (s *Service) Connect(dsn string) (*Status, error) {
 		return nil, err
 	}
 	s.conn = conn
+	s.dsn = dsn
 	s.schema = "public"
 	return s.statusLocked(), nil
 }
@@ -126,11 +128,24 @@ func (s *Service) UseSchema(schema string) error {
 	return nil
 }
 
+// requireConn reconnects when the connection was closed, e.g. by a query
+// that hit the timeout, and restores the schema.
 func (s *Service) requireConn() error {
 	if s.conn == nil {
 		return errors.New("not connected")
 	}
-	return nil
+	if !s.conn.IsClosed() {
+		return nil
+	}
+	c, cancel := ctx()
+	defer cancel()
+	conn, err := pgx.Connect(c, s.dsn)
+	if err != nil {
+		return fmt.Errorf("reconnecting: %w", err)
+	}
+	s.conn = conn
+	_, err = s.conn.Exec(c, "SELECT set_config('search_path', $1, false)", pgx.Identifier{s.schema}.Sanitize()+", public")
+	return err
 }
 
 // exec runs SQL with the simple protocol, which allows several statements

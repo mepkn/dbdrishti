@@ -1,4 +1,4 @@
-# Drishti
+# DBDrishti
 
 Desktop app for learning SQL: type a query, see what every clause does to the rows, and see how tables link through foreign keys, before you run anything for real.
 
@@ -31,10 +31,10 @@ wails3 dev
 | Command | What it does |
 |---|---|
 | `wails3 dev` | Run with hot reload |
-| `wails3 build` | Build `bin/drishti` |
+| `wails3 build` | Build `bin/dbdrishti` |
 | `wails3 package` | Build the macOS `.app` |
 | `wails3 generate bindings -ts` | Regenerate the frontend bindings after changing the Go service |
-| `go test ./...` | Analyzer tests; set `DRISHTI_TEST_DSN=postgres://postgres:mysecretpassword@localhost:5432/postgres` to also run the live tests (they recreate the `shop` schema) |
+| `go test ./...` | Analyzer tests; set `DBDRISHTI_TEST_DSN=postgres://postgres:mysecretpassword@localhost:5432/postgres` to also run the live tests (they recreate the `shop` schema) |
 | `npm --prefix frontend run typecheck` | Typecheck the frontend |
 
 ## How it works

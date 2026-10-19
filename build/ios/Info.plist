@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleExecutable</key>
-    <string>drishti</string>
+    <string>dbdrishti</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.drishti</string>
+    <string>com.example.dbdrishti</string>
     <key>CFBundleName</key>
     <string>My Product</string>
     <key>CFBundleDisplayName</key>

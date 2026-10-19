@@ -1,4 +1,4 @@
-module github.com/mepkn/drishti
+module github.com/mepkn/dbdrishti
 
 go 1.25.0
 

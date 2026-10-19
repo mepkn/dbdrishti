@@ -3,26 +3,26 @@
 #
 # The lines below are called `modelines`. See `:help modeline`
 
-name: "drishti"
+name: "dbdrishti"
 arch: ${GOARCH}
 platform: "linux"
 version: "0.1.0"
 section: "default"
 priority: "extra"
 maintainer: ${GIT_COMMITTER_NAME} <${GIT_COMMITTER_EMAIL}>
-description: "A drishti application"
+description: "A dbdrishti application"
 vendor: "My Company"
 homepage: "https://wails.io"
 license: "MIT"
 release: "1"
 
 contents:
-  - src: "./bin/drishti"
-    dst: "/usr/local/bin/drishti"
+  - src: "./bin/dbdrishti"
+    dst: "/usr/local/bin/dbdrishti"
   - src: "./build/appicon.png"
-    dst: "/usr/share/icons/hicolor/128x128/apps/drishti.png"
-  - src: "./build/linux/drishti.desktop"
-    dst: "/usr/share/applications/drishti.desktop"
+    dst: "/usr/share/icons/hicolor/128x128/apps/dbdrishti.png"
+  - src: "./build/linux/dbdrishti.desktop"
+    dst: "/usr/share/applications/dbdrishti.desktop"
 
 # Default dependencies for the GTK4 + WebKitGTK 6.0 stack (Ubuntu 24.04+ / Debian 13+)
 depends:

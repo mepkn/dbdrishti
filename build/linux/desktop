@@ -1,13 +1,13 @@
 [Desktop Entry]
 Version=1.0
 Name=My Product
-Comment=A drishti application
+Comment=A dbdrishti application
 # The Exec line includes %u to pass the URL to the application
-Exec=/usr/local/bin/drishti %u
+Exec=/usr/local/bin/dbdrishti %u
 Terminal=false
 Type=Application
-Icon=drishti
+Icon=dbdrishti
 Categories=Utility;
-StartupWMClass=drishti
+StartupWMClass=dbdrishti
 
  

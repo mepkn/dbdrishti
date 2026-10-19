@@ -1,5 +1,5 @@
-import * as service from "../../bindings/github.com/mepkn/drishti/internal/db/service";
-import type * as m from "../../bindings/github.com/mepkn/drishti/internal/db/models";
+import * as service from "../../bindings/github.com/mepkn/dbdrishti/internal/db/service";
+import type * as m from "../../bindings/github.com/mepkn/dbdrishti/internal/db/models";
 
 // The generated bindings type every Go slice as `T[] | null`. The service
 // always returns empty slices instead of nil, so Fix drops those nulls

@@ -216,7 +216,7 @@ func (s *Service) JoinView(sql string) (*JoinView, error) {
 		}
 		i := len(tables)
 		tables = append(tables, rv)
-		_, sub, err := lastStmt(fmt.Sprintf("SELECT row_number() OVER (ORDER BY ctid) AS __drishti_%d, * FROM %s", i, quoteRel(rv)))
+		_, sub, err := lastStmt(fmt.Sprintf("SELECT row_number() OVER (ORDER BY ctid) AS __dbdrishti_%d, * FROM %s", i, quoteRel(rv)))
 		if err != nil {
 			return err
 		}
@@ -230,7 +230,7 @@ func (s *Service) JoinView(sql string) (*JoinView, error) {
 	}
 	sel.TargetList = nil
 	for i, rv := range tables {
-		col := pg.MakeColumnRefNode([]*pg.Node{pg.MakeStrNode(aliasOf(rv)), pg.MakeStrNode(fmt.Sprintf("__drishti_%d", i))}, 0)
+		col := pg.MakeColumnRefNode([]*pg.Node{pg.MakeStrNode(aliasOf(rv)), pg.MakeStrNode(fmt.Sprintf("__dbdrishti_%d", i))}, 0)
 		sel.TargetList = append(sel.TargetList, pg.MakeResTargetNodeWithVal(col, 0))
 	}
 	sel.GroupClause, sel.HavingClause, sel.DistinctClause, sel.SortClause, sel.WindowClause = nil, nil, nil, nil, nil
@@ -264,7 +264,7 @@ func (s *Service) JoinView(sql string) (*JoinView, error) {
 			pick, hiddenWhere, hiddenNoMatch := pickRows(ti, t.Total, view.Filtered, view.Joined)
 			t.HiddenWhere, t.HiddenNoMatch = hiddenWhere, hiddenNoMatch
 			res, err := s.execOne(c, fmt.Sprintf(
-				"SELECT * FROM (SELECT row_number() OVER (ORDER BY ctid) - 1 AS __drishti_n, * FROM %s) s WHERE __drishti_n = ANY ('{%s}'::bigint[]) ORDER BY __drishti_n",
+				"SELECT * FROM (SELECT row_number() OVER (ORDER BY ctid) - 1 AS __dbdrishti_n, * FROM %s) s WHERE __dbdrishti_n = ANY ('{%s}'::bigint[]) ORDER BY __dbdrishti_n",
 				quoteRel(rv), joinInts(pick)))
 			if err != nil {
 				return err

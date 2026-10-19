@@ -5,7 +5,7 @@ import (
 
 	"log"
 
-	"github.com/mepkn/drishti/internal/db"
+	"github.com/mepkn/dbdrishti/internal/db"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
@@ -25,7 +25,7 @@ func main() {
 	// 'Bind' is a list of Go struct instances. The frontend has access to the methods of these instances.
 	// 'Mac' options tailor the application when running an macOS.
 	app := application.New(application.Options{
-		Name:        "drishti",
+		Name:        "dbdrishti",
 		Description: "Visualise SQL queries, joins and foreign keys while you learn",
 		Services: []application.Service{
 			application.NewService(&db.Service{}),
@@ -44,7 +44,7 @@ func main() {
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title: "Drishti",
+		Title: "DBDrishti",
 			Width:  1440,
 		Height: 900,
 		Mac: application.MacWindow{
