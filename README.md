@@ -11,6 +11,7 @@ Desktop app for learning SQL: type a query, see what every clause does to the ro
 - Dry run for writes and DDL: runs in a transaction that is rolled back and shows the rows affected, row counts that would change (including FK cascades), foreign key errors explained, and the schema diagram after a CREATE/ALTER
 - EXPLAIN ANALYZE plan as a tree
 - Sample `shop` schema with one-to-many, many-to-many and self-referencing keys; example queries; query history
+- Checks for updates on launch and from DBDrishti → Check for Updates… in the menu bar; installs the latest GitHub release and restarts
 
 ## Stack
 
@@ -43,4 +44,5 @@ wails3 dev
 - `analyze.go` parses the SQL with pg_query_go, without touching the database, and builds the explanation and warnings.
 - `visualize.go` rewrites the parse tree. **Steps** removes clauses one at a time. **Join view** swaps every table for `SELECT row_number() OVER (ORDER BY ctid), * FROM t`, then selects only those row numbers, with and without WHERE, to see which rows pair up. **Preview** adds `RETURNING *` and runs the statement between `BEGIN` and `ROLLBACK`.
 - `sample.sql` is the `shop` schema the "Load sample" button recreates.
+- **Updates** (`update.go`): release builds carry their short commit SHA (`-X main.commit`, set in `build/darwin/Taskfile.yml`). On launch and from DBDrishti → Check for Updates…, the app compares it with the tag of the latest GitHub release; if they differ it downloads `dbdrishti-macos.zip` to a temp folder, quits, swaps the `.app` in place (putting the old one back if that fails), deletes the download and relaunches. The app's folder must be writable. Builds without a SHA (`wails3 dev`) skip the check.
 - `frontend/src/components` holds one panel per tab. `lib/api.ts` wraps the generated bindings.
